@@ -3,9 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "prestart": "npm install",
     "start": "node ./bin/www",
-    "pretest": "npm install",
+    "start-dev": "nodemon www",
     "test": "./node_modules/.bin/mocha test"
   },
   "dependencies": {
@@ -31,4 +30,3 @@
     "sqlite3": "^4.1.0"
   }
 }
-

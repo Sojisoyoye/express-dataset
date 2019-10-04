@@ -88,8 +88,8 @@ const getByActor = (req, res) => {
 			return res.status(404).json({
 				status_code: 404,
 				message: 'Actor not found'
-			})
-		}
+			});
+		};
 		
 		const actorId = actor.id;
 		Event.findAll({

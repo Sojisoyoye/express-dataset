@@ -1,9 +1,6 @@
 const models = require('../models');
-var actorController = require('../controllers/actors');
 
-var { getAllActors } = actorController;
-
-const { Actor } = models;
+const { Actor, Event } = models;
 
 var getAllActors = (req, res) => {
 	Actor.findAll({
@@ -23,12 +20,61 @@ var getAllActors = (req, res) => {
 	
 };
 
-var updateActor = () => {
+var updateActor = (req, res) => {
+	const { id, avatar_url } = req.body;
 
+	Actor.findByPk(id)
+	.then((actor) => {
+		if (!actor) {
+			return res.status(404).json({
+				status_code: 404,
+				message: 'Actor not found'
+			});
+		};
+
+		actor.update({
+			avatar_url
+		});
+
+		return res.status(200).json({
+			status_code: 200,
+			body: {}
+		});
+
+	}).catch((error) => {
+		return res.status(400).json({
+			status_code: 400,
+			body: error
+		})
+	})
 };
 
-var getStreak = () => {
-
+const getStreak = (req, res) => {
+	Actor.findAll({
+		include: [{
+			model: Event,
+			attributes: {
+			exclude: ['id', 'type', 'actor_id', 'repo_id', 'createdAt', 'updatedAt']
+			}
+		}],
+		order: [
+			['createdAt', 'DESC'],
+			['login', 'DESC']
+		],
+		attributes: ['id', 'login', 'avatar_url']
+	})
+	.then((actors) => {
+		return res.status(200).json({
+			status_code: 200,
+			body: actors
+		})
+	})
+	.catch((error) => {
+		return res.status(400).json({
+			status_code: 400,
+			body: error
+		})
+	})
 };
 
 
